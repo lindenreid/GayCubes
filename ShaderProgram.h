@@ -6,7 +6,7 @@ namespace GayCubes
 	class ShaderProgram
 	{
 	public:
-		ShaderProgram();
+		ShaderProgram(int fragShaderOption);
 		unsigned int shaderProgram;
 
 		// TODO: anything but this
@@ -23,6 +23,13 @@ namespace GayCubes
 			"void main()\n"
 			"{\n"
 			"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+			"}\n\0";
+
+		const char* fragmentShaderSource2 = "#version 330 core\n"
+			"out vec4 FragColor;\n"
+			"void main()\n"
+			"{\n"
+			"   FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
 			"}\n\0";
 
 	private:
