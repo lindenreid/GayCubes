@@ -151,8 +151,8 @@
     <ClInclude Include="ShaderProgram.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\test.glsl" />
-    <None Include="shaders\testFrag.glsl" />
+    <None Include="shaders\rainbowVertex.glsl" />
+    <None Include="shaders\rainbowFrag.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

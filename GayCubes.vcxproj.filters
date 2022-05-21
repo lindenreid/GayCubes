@@ -43,7 +43,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\test.glsl" />
-    <None Include="shaders\testFrag.glsl" />
+    <None Include="shaders\rainbowVertex.glsl" />
+    <None Include="shaders\rainbowFrag.glsl" />
   </ItemGroup>
 </Project>
