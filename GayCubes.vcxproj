@@ -139,9 +139,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Users\Linden\Downloads\glad\src\glad.c" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="libraries\glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
   </ItemGroup>
