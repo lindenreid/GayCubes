@@ -37,8 +37,7 @@ int main()
 	glViewport(0, 0, 800, 600);
 
 	// shader program
-	ShaderProgram shader1 = ShaderProgram::ShaderProgram(0);
-	ShaderProgram shader2 = ShaderProgram::ShaderProgram(1);
+	ShaderProgram shader = ShaderProgram::ShaderProgram();
 
 	// centered rect in NDC
 	float tri1[] = {
@@ -96,12 +95,10 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// draw object
-		glUseProgram(shader1.shaderProgram);
+		glUseProgram(shader.shaderProgram);
 		
 		glBindVertexArray(VAOs[0]);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
-
-		glUseProgram(shader2.shaderProgram);
 
 		glBindVertexArray(VAOs[1]);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -114,8 +111,7 @@ int main()
 	// de-allocate all resources
 	glDeleteVertexArrays(2, VAOs);
 	glDeleteBuffers(2, VBOs);
-	glDeleteProgram(shader1.shaderProgram);
-	glDeleteProgram(shader2.shaderProgram);
+	glDeleteProgram(shader.shaderProgram);
 
 	// clean up GLFW resources
 	glfwTerminate();

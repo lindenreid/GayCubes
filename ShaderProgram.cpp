@@ -6,7 +6,7 @@
 
 namespace GayCubes
 {
-	ShaderProgram::ShaderProgram(int fragShaderOption)
+	ShaderProgram::ShaderProgram()
 	{
 		shaderProgram = glCreateProgram();
 
@@ -16,14 +16,7 @@ namespace GayCubes
 
 		unsigned int fragmentShader;
 		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-		if (fragShaderOption == 0)
-		{
-			CreateShader(fragmentShader, fragmentShaderSource);
-		}
-		else
-		{
-			CreateShader(fragmentShader, fragmentShaderSource2);
-		}
+		CreateShader(fragmentShader, fragmentShaderSource);
 
 		glAttachShader(shaderProgram, vertexShader);
 		glAttachShader(shaderProgram, fragmentShader);
