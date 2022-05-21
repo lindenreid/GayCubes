@@ -9,6 +9,54 @@
 
 using namespace GayCubes;
 
+// sin
+const char* vertexShaderSource = "#version 330 core\n"
+"layout (location = 0) in vec3 aPos;\n"
+"void main()\n"
+"{\n"
+"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"}\0";
+
+// SIIIIN
+const char* fragmentShaderSource = "#version 330 core\n"
+"out vec4 FragColor;\n"
+"void main()\n"
+"{\n"
+"	FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f); \n"
+"}\0";
+
+void CreateShader(unsigned int shader, const char* source)
+{
+	glShaderSource(shader, 1, &source, NULL);
+	glCompileShader(shader);
+
+	// check for compile errors in shader
+	int success;
+	char infoLog[512];
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		glGetShaderInfoLog(shader, 512, NULL, infoLog);
+		std::cout << "ERROR: vertex shader compilation failed\n" << infoLog << std::endl;
+	}
+}
+
+void CreateShaderProgram(unsigned int shaderProgram, unsigned int vertexShader, unsigned int fragmentShader)
+{
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+	glLinkProgram(shaderProgram);
+
+	int success;
+	char infoLog[512];
+	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+	if (!success)
+	{
+		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+		std::cout << "ERROR: shader program creation failed\n" << infoLog << std::endl;
+	}
+}
+
 int main()
 {
 	glfwInit();
@@ -45,6 +93,38 @@ int main()
 		glClearColor(gray.r, gray.g, gray.b, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		// centered triangle in NDC
+		float vertices[] = {
+			-0.5f, -0.5f, 0.0f,
+			0.5f, -0.5f, 0.0f,
+			0.0f, 0.5f, 0.0f
+		};
+
+		unsigned int VBO; // OpenGL references objects by ID 
+		glGenBuffers(1, &VBO); // generate an ID for our mesh
+		glBindBuffer(GL_ARRAY_BUFFER, VBO); // set buffer target to VBO as an array buffer (the type used for meshes)
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); // send to GPU
+
+		// create the shaders
+		unsigned int vertexShader;
+		vertexShader = glCreateShader(GL_VERTEX_SHADER);
+		CreateShader(vertexShader, vertexShaderSource);
+
+		unsigned int fragmentShader;
+		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+		CreateShader(fragmentShader, fragmentShaderSource);
+
+		unsigned int shaderProgram;
+		shaderProgram = glCreateProgram();
+		CreateShaderProgram(shaderProgram, vertexShader, fragmentShader);
+
+		glUseProgram(shaderProgram);
+
+		// remove shaders once we've linked them
+		glDeleteShader(vertexShader);
+		glDeleteShader(fragmentShader);
+
+		// draw window
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
