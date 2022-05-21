@@ -39,28 +39,41 @@ int main()
 	// shader program
 	ShaderProgram shader = ShaderProgram::ShaderProgram();
 
-	// VAO
+	// vertex array object
 	unsigned int VAO;
  	glGenVertexArrays(1, &VAO);
 
-	// VBO
+	// vertex bufffer object
 	unsigned int VBO; // OpenGL references objects by ID 
 	glGenBuffers(1, &VBO); // generate an ID for our mesh
 
-	// centered triangle in NDC
+	// centered rect in NDC
 	float vertices[] = {
-		-0.5f, -0.5f, 0.0f,
+		0.5f, 0.5f, 0.0f,
 		0.5f, -0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f
+		-0.5f, -0.5f, 0.0f,
+		-0.5f, 0.5f, 0.0f,
 	};
+	unsigned int indices[] = {
+		0, 1, 3,
+		1, 2, 3
+	};
+
+	// element buffer object- allows linking verts to triangle indices
+	unsigned int EBO;
+	glGenBuffers(1, &EBO);
 
 	// one-time VAO initialization 
 	// 1. bind vertex array
 	glBindVertexArray(VAO);
-	// 2. copy our verts into a buffer
+	// copy our verts into a buffer
+	// 2. bind vbo
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // set buffer target to VBO as an array buffer (the type used for meshes)
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); // send to 
-	// 3. link vertex attributes
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); // send to gpu
+	// 3. bind ebo
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	// 4. link vertex attributes
 	// location = 0 (vertex position input in vertex input)
 	// size = 3 (# of values)
 	// data type = FLOAT
@@ -80,13 +93,17 @@ int main()
 		glClearColor(gray.r, gray.g, gray.b, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// 4. draw object
+		// draw object
 		glUseProgram(shader.shaderProgram);
 		glBindVertexArray(VAO);
-		// primitive type: triangles
-		// starting index of vertex array: 0
-		// how many verts: 3
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		// mode: triangles
+		// # of indices: 6
+		// index type: unsigned int
+		// offet: not needed bc we bound an EBO
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		
+		// unbind
+		glBindVertexArray(0);
 
 		// draw window
 		glfwSwapBuffers(window);
