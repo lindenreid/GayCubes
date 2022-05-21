@@ -6,29 +6,60 @@
 
 namespace GayCubes
 {
-	ShaderProgram::ShaderProgram()
+	ShaderProgram::ShaderProgram(const char* vertexPath, const char* fragmentPath)
 	{
-		shaderProgram = glCreateProgram();
+		// retrieve code from file path
+		std::string vertexCode;
+		std::string fragmentCode;
+		std::ifstream vShaderFile;
+		std::ifstream fShaderFile;
+		// ensure ifstream objs can throw exceptions
+		vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+		fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+		try
+		{
+			// open files
+			vShaderFile.open(vertexPath);
+			fShaderFile.open(fragmentPath);
+			std::stringstream vShaderStream, fShaderStream;
+			// read file buffer into streams
+			vShaderStream << vShaderFile.rdbuf();
+			fShaderStream << fShaderFile.rdbuf();
+			// close file handlers
+			vShaderFile.close();
+			fShaderFile.close();
+			// convert stream into string
+			vertexCode = vShaderStream.str();
+			fragmentCode = fShaderStream.str();
+		}
+		catch (std::ifstream::failure e)
+		{
+			std::cout << "ERROR: shader file not successfully read" << std::endl;
+		}
+		const char* vertShaderSource = vertexCode.c_str();
+		const char* fragShaderSource = fragmentCode.c_str();
 
 		unsigned int vertexShader;
 		vertexShader = glCreateShader(GL_VERTEX_SHADER);
-		CreateShader(vertexShader, vertexShaderSource);
+		createShader(vertexShader, vertShaderSource);
 
 		unsigned int fragmentShader;
 		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-		CreateShader(fragmentShader, fragmentShaderSource);
+		createShader(fragmentShader, fragShaderSource);
 
-		glAttachShader(shaderProgram, vertexShader);
-		glAttachShader(shaderProgram, fragmentShader);
+		shaderID = glCreateProgram();
+
+		glAttachShader(shaderID, vertexShader);
+		glAttachShader(shaderID, fragmentShader);
 		
-		glLinkProgram(shaderProgram);
+		glLinkProgram(shaderID);
 
 		int success;
 		char infoLog[512];
-		glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+		glGetProgramiv(shaderID, GL_LINK_STATUS, &success);
 		if (!success)
 		{
-			glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+			glGetProgramInfoLog(shaderID, 512, NULL, infoLog);
 			std::cout << "ERROR: shader program creation failed\n" << infoLog << std::endl;
 		}
 
@@ -37,7 +68,7 @@ namespace GayCubes
 		glDeleteShader(fragmentShader);
 	}
 
-	void ShaderProgram::CreateShader(unsigned int shader, const char* source)
+	void ShaderProgram::createShader(unsigned int shader, const char* source)
 	{
 		glShaderSource(shader, 1, &source, NULL);
 		glCompileShader(shader);
@@ -53,10 +84,20 @@ namespace GayCubes
 		}
 	}
 
-	// note: requires you call glUseProgram on this shader first
-	void ShaderProgram::SetGlobalValue(float value, const char name[])
+	void ShaderProgram::useProgram()
 	{
-		int valRef = glGetUniformLocation(shaderProgram, name);
+		glUseProgram(shaderID);
+	}
+
+	void ShaderProgram::deallocateProgram()
+	{
+		glDeleteProgram(shaderID);
+	}
+
+	// note: requires you call glUseProgram on this shader first
+	void ShaderProgram::setGlobalFloatValue(float value, const char name[])
+	{
+		int valRef = glGetUniformLocation(shaderID, name);
 		// location: the location we got for the named uniform
 		// count: # of elements (if vertex type)
 		// value: the value to set

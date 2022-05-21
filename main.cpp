@@ -38,7 +38,7 @@ int main()
 	glViewport(0, 0, 800, 600);
 
 	// shader program
-	ShaderProgram shader = ShaderProgram::ShaderProgram();
+	ShaderProgram shader = ShaderProgram::ShaderProgram("shaders/rainbowVertex.glsl", "shaders/rainbowFrag.glsl");
 
 	// triangle in NDC
 	float tri1[] = {
@@ -82,13 +82,8 @@ int main()
 		Color gray = Color::grayMid;
 		glClearColor(gray.r, gray.g, gray.b, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-
-		// set uniform (global) shader value to change color with time
-		float t = glfwGetTime();
-		float greenVal = (sin(t) / 2.0f) + 0.5f;
 		
-		glUseProgram(shader.shaderProgram);
-		shader.SetGlobalValue(greenVal, "globalColor");
+		shader.useProgram();
 		
 		// draw object
 		glBindVertexArray(VAO);
@@ -102,7 +97,7 @@ int main()
 	// de-allocate all resources
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
-	glDeleteProgram(shader.shaderProgram);
+	shader.deallocateProgram();
 
 	// clean up GLFW resources
 	glfwTerminate();
