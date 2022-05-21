@@ -5,6 +5,7 @@
 #include <glfw-3.3.7/include/GLFW/glfw3.h>
 
 #include "Input.h"
+#include "Color.h"
 
 using namespace GayCubes;
 
@@ -39,6 +40,10 @@ int main()
 	while (!glfwWindowShouldClose(window))
 	{
 		Input::processInput(window);
+
+		Color green = Color::green;
+		glClearColor(green.r, green.g, green.b, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
