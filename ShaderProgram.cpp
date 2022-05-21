@@ -6,18 +6,21 @@
 
 namespace GayCubes
 {
-	ShaderProgram::ShaderProgram(unsigned int shaderProgram)
+	ShaderProgram::ShaderProgram()
 	{
+		shaderProgram = glCreateProgram();
+
 		unsigned int vertexShader;
 		vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		CreateShader(vertexShader, vertexShaderSource);
 
 		unsigned int fragmentShader;
 		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
 		CreateShader(fragmentShader, fragmentShaderSource);
+
 		glAttachShader(shaderProgram, vertexShader);
 		glAttachShader(shaderProgram, fragmentShader);
+		
 		glLinkProgram(shaderProgram);
 
 		int success;
