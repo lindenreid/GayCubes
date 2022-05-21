@@ -142,17 +142,22 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="libraries\glad.c" />
+    <ClCompile Include="libraries\stb_image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="libraries\stb_image.h" />
     <ClInclude Include="ShaderProgram.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\rainbowVertex.glsl" />
     <None Include="shaders\rainbowFrag.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\container.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
