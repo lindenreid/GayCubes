@@ -84,6 +84,8 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 		
 		shader.useProgram();
+
+		shader.setGlobalBoolValue(true, "offset");
 		
 		// draw object
 		glBindVertexArray(VAO);

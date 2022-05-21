@@ -95,12 +95,30 @@ namespace GayCubes
 	}
 
 	// note: requires you call glUseProgram on this shader first
+	void ShaderProgram::setGlobalVec4Value(float value[], const char name[])
+	{
+		int valRef = glGetUniformLocation(shaderID, name);
+		glUniform4f(valRef, value[0], value[1], value[2], value[3]);
+	}
+
+	// note: requires you call glUseProgram on this shader first
 	void ShaderProgram::setGlobalFloatValue(float value, const char name[])
 	{
 		int valRef = glGetUniformLocation(shaderID, name);
-		// location: the location we got for the named uniform
-		// count: # of elements (if vertex type)
-		// value: the value to set
-		glUniform4f(valRef, 0.0f, value, 0.0f, 1.0f);
+		glUniform1f(valRef, value);
+	}
+
+	// note: requires you call glUseProgram on this shader first
+	void ShaderProgram::setGlobalBoolValue(bool value, const char name[])
+	{
+		int valRef = glGetUniformLocation(shaderID, name);
+		glUniform1i(valRef, (int)value);
+	}
+
+	// note: requires you call glUseProgram on this shader first
+	void ShaderProgram::setGlobalIntValue(int value, const char name[])
+	{
+		int valRef = glGetUniformLocation(shaderID, name);
+		glUniform1i(valRef, value);
 	}
 }

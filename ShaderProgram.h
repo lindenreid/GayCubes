@@ -21,7 +21,10 @@ namespace GayCubes
 		void deallocateProgram();
 		
 		// uniform value setters
+		void setGlobalVec4Value(float value[], const char name[]);
 		void setGlobalFloatValue(float value, const char name[]);
+		void setGlobalBoolValue(bool value, const char name[]);
+		void setGlobalIntValue(int value, const char name[]);
 
 	private:
 		unsigned int shaderID;
