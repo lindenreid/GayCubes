@@ -39,49 +39,55 @@ int main()
 	// shader program
 	ShaderProgram shader = ShaderProgram::ShaderProgram();
 
+	// centered rect in NDC
+	float vertices[] = {
+		// 1st
+		0.2f, 0.8f, 0.0f,
+		0.8f, 0.0f, 0.0f,
+		0.2f, 0.0f, 0.0f,
+		// 2nd
+		-0.2f, 0.0f, 0.0f,
+		-0.8f, 0.0f, 0.0f,
+		-0.8f, 0.8f, 0.0f,
+	};
+
 	// vertex array object
 	unsigned int VAO;
- 	glGenVertexArrays(1, &VAO);
+	glGenVertexArrays(1, &VAO);
 
 	// vertex bufffer object
 	unsigned int VBO; // OpenGL references objects by ID 
 	glGenBuffers(1, &VBO); // generate an ID for our mesh
 
-	// centered rect in NDC
-	float vertices[] = {
-		0.5f, 0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		-0.5f, -0.5f, 0.0f,
-		-0.5f, 0.5f, 0.0f,
-	};
-	unsigned int indices[] = {
-		0, 1, 3,
-		1, 2, 3
-	};
-
 	// element buffer object- allows linking verts to triangle indices
-	unsigned int EBO;
-	glGenBuffers(1, &EBO);
+	//unsigned int EBO;
+	//glGenBuffers(1, &EBO);
 
 	// one-time VAO initialization 
 	// 1. bind vertex array
 	glBindVertexArray(VAO);
+
 	// copy our verts into a buffer
 	// 2. bind vbo
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // set buffer target to VBO as an array buffer (the type used for meshes)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); // send to gpu
+	
 	// 3. bind ebo
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	
 	// 4. link vertex attributes
 	// location = 0 (vertex position input in vertex input)
-	// size = 3 (# of values)
+	// size = 3 (# of components per vertex- in this case just xyz)
 	// data type = FLOAT
 	// normalized = false
-	// stride = size of data entries (3*float because we have 3 floats describing xyz position)
+	// stride = size of data entries for each vertex (3*float because we have 3 floats describing xyz position)
 	// offset = 0 (position where data begins)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 
 	// render loop
 	// TODO: double buffering
@@ -96,14 +102,17 @@ int main()
 		// draw object
 		glUseProgram(shader.shaderProgram);
 		glBindVertexArray(VAO);
+
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
 		// mode: triangles
 		// # of indices: 6
 		// index type: unsigned int
 		// offet: not needed bc we bound an EBO
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		
 		// unbind
-		glBindVertexArray(0);
+		//glBindVertexArray(0);
 
 		// draw window
 		glfwSwapBuffers(window);
