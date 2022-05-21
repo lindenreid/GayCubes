@@ -4,6 +4,10 @@
 #include <GLAD/glad/glad.h>
 #include <glfw-3.3.7/include/GLFW/glfw3.h>
 
+#include "Input.h"
+
+using namespace GayCubes;
+
 int main()
 {
 	glfwInit();
@@ -34,6 +38,8 @@ int main()
 	// TODO: double buffering
 	while (!glfwWindowShouldClose(window))
 	{
+		Input::processInput(window);
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
