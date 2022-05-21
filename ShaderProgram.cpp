@@ -52,4 +52,14 @@ namespace GayCubes
 			std::cout << "ERROR: vertex shader compilation failed\n" << infoLog << std::endl;
 		}
 	}
+
+	// note: requires you call glUseProgram on this shader first
+	void ShaderProgram::SetGlobalValue(float value, const char name[])
+	{
+		int valRef = glGetUniformLocation(shaderProgram, name);
+		// location: the location we got for the named uniform
+		// count: # of elements (if vertex type)
+		// value: the value to set
+		glUniform4f(valRef, 0.0f, value, 0.0f, 1.0f);
+	}
 }

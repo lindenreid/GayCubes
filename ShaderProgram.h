@@ -7,6 +7,8 @@ namespace GayCubes
 	{
 	public:
 		ShaderProgram();
+		void SetGlobalValue(float value, const char name[]);
+
 		unsigned int shaderProgram;
 
 		// TODO: anything but this
@@ -22,10 +24,10 @@ namespace GayCubes
 		// SIIIIN
 		const char* fragmentShaderSource = "#version 330 core\n"
 			"out vec4 FragColor;\n"
-			"in vec4 vertexColor;\n"
+			"uniform vec4 globalColor;\n"
 			"void main()\n"
 			"{\n"
-			"	FragColor = vertexColor;\n"
+			"	FragColor = globalColor;\n"
 			"}\n\0";
 
 	private:

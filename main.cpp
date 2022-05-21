@@ -1,6 +1,7 @@
 // HelloWorld.cpp : This file contains the 'main' function. Program execution begins and ends there.
 
 #include <iostream>
+#include <cmath>
 #include <GLAD/glad/glad.h>
 #include <glfw-3.3.7/include/GLFW/glfw3.h>
 
@@ -94,9 +95,14 @@ int main()
 		glClearColor(gray.r, gray.g, gray.b, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// draw object
-		glUseProgram(shader.shaderProgram);
+		// set uniform (global) shader value to change color with time
+		float t = glfwGetTime();
+		float greenVal = (sin(t) / 2.0f) + 0.5f;
 		
+		glUseProgram(shader.shaderProgram);
+		shader.SetGlobalValue(greenVal, "globalColor");
+		
+		// draw object
 		glBindVertexArray(VAOs[0]);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
