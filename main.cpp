@@ -41,8 +41,8 @@ int main()
 	{
 		Input::processInput(window);
 
-		Color green = Color::green;
-		glClearColor(green.r, green.g, green.b, 1.0f);
+		Color gray = Color::grayMid;
+		glClearColor(gray.r, gray.g, gray.b, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glfwSwapBuffers(window);

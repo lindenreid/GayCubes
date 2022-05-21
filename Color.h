@@ -17,6 +17,9 @@ namespace GayCubes
 		static Color red;
 		static Color green;
 		static Color blue;
+		static Color grayLight;
+		static Color grayMid;
+		static Color grayDark;
 	};
 }
 
