@@ -4,17 +4,13 @@
 #include <GLAD/glad/glad.h>
 #include <glfw-3.3.7/include/GLFW/glfw3.h>
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
-}
-
 int main()
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_RESIZABLE, false);
 
 	GLFWwindow* window = glfwCreateWindow(800, 600, "GayCubes", NULL, NULL);
 	if (window == NULL)
@@ -33,9 +29,6 @@ int main()
 	}
 
 	glViewport(0, 0, 800, 600);
-
-	// register window resize callback
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	// render loop
 	// TODO: double buffering
