@@ -40,47 +40,35 @@ int main()
 	// shader program
 	ShaderProgram shader = ShaderProgram::ShaderProgram();
 
-	// centered rect in NDC
+	// triangle in NDC
 	float tri1[] = {
-		// 1st
-		0.2f, 0.8f, 0.0f,
-		0.8f, 0.0f, 0.0f,
-		0.2f, 0.0f, 0.0f
-	};
-
-	float tri2[] = {
-		-0.2f, 0.0f, 0.0f,
-		-0.8f, 0.0f, 0.0f,
-		-0.8f, 0.8f, 0.0f,
+		// pos				// colors
+		0.2f, 0.8f, 0.0f,	1.0f, 0.0f, 0.0f,
+		0.8f, 0.0f, 0.0f,	0.0f, 1.0f, 0.0f,
+		0.2f, 0.0f, 0.0f,	0.0f, 0.0f, 1.0f
 	};
 
 	// vertex array objects
-	unsigned int VAOs[2];
-	glGenVertexArrays(2, VAOs);
+	unsigned int VAO;
+	glGenVertexArrays(1, &VAO);
 
 	// vertex buffer object
-	unsigned int VBOs[2]; // OpenGL references objects by ID 
-	glGenBuffers(2, VBOs); // generate an ID for our mesh
+	unsigned int VBO; // OpenGL references objects by ID 
+	glGenBuffers(1, &VBO); // generate an ID for our mesh
 
 	// one-time VAO initialization 
 	// 1. bind vertex array
-	glBindVertexArray(VAOs[0]);
+	glBindVertexArray(VAO);
 	// 2. bind vbo
-	glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]); // set buffer target to VBO as an array buffer (the type used for meshes)
+	glBindBuffer(GL_ARRAY_BUFFER, VBO); // set buffer target to VBO as an array buffer (the type used for meshes)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(tri1), tri1, GL_STATIC_DRAW); // send to gpu
 	// 4. link vertex attributes
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	// position
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-
-	// one-time VAO initialization 
-	// 1. bind vertex array
-	glBindVertexArray(VAOs[1]);
-	// 2. bind vbo
-	glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]); // set buffer target to VBO as an array buffer (the type used for meshes)
-	glBufferData(GL_ARRAY_BUFFER, sizeof(tri2), tri2, GL_STATIC_DRAW); // send to gpu
-	// 4. link vertex attributes
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
+	// color
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -103,10 +91,7 @@ int main()
 		shader.SetGlobalValue(greenVal, "globalColor");
 		
 		// draw object
-		glBindVertexArray(VAOs[0]);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-
-		glBindVertexArray(VAOs[1]);
+		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		// draw window
@@ -115,8 +100,8 @@ int main()
 	}
 
 	// de-allocate all resources
-	glDeleteVertexArrays(2, VAOs);
-	glDeleteBuffers(2, VBOs);
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
 	glDeleteProgram(shader.shaderProgram);
 
 	// clean up GLFW resources
