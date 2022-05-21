@@ -143,10 +143,12 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ShaderProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="ShaderProgram.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\test.glsl" />
