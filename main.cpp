@@ -9,6 +9,7 @@
 #include "Input.h"
 #include "Color.h"
 #include "ShaderProgram.h"
+#include "Texture.h"
 
 using namespace GayCubes;
 
@@ -78,28 +79,15 @@ int main()
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
+	Texture tex1 = Texture::Texture(0, "textures/container.jpg", false);
+	tex1.loadTexture();
 
-	// bind texture
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	// set tex params
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// load texture
-	int w, h, nrChannels;
-	unsigned char* data = stbi_load("textures/container.jpg", &w, &h, &nrChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else {
-		std::cout << "failed to load texture" << std::endl;
-	}
-	stbi_image_free(data);
+	Texture tex2 = Texture::Texture(1, "textures/awesomeFace.png", true);
+	tex2.loadTexture();
+
+	shader.useProgram();
+	shader.setGlobalIntValue(0, "texture1");
+	shader.setGlobalIntValue(1, "texture2");
 
 	// render loop
 	// TODO: double buffering
@@ -112,8 +100,8 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 		
 		// define texture and shader
-		glBindTexture(GL_TEXTURE_2D, texture);
-		shader.useProgram();
+		tex1.bindTexture();
+		tex2.bindTexture();
 		
 		// draw object
 		glBindVertexArray(VAO);
