@@ -94,28 +94,35 @@ namespace GayCubes
 		glDeleteProgram(shaderID);
 	}
 
-	// note: requires you call glUseProgram on this shader first
+	// note: requires you to call glUseProgram on this shader first
+	void ShaderProgram::setGlobalMatrix4Value(glm::mat4 matrix, const char name[])
+	{
+		unsigned int transformLoc = glGetUniformLocation(shaderID, name);
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+
+	// note: requires you to call glUseProgram on this shader first
 	void ShaderProgram::setGlobalVec4Value(float value[], const char name[])
 	{
 		int valRef = glGetUniformLocation(shaderID, name);
 		glUniform4f(valRef, value[0], value[1], value[2], value[3]);
 	}
 
-	// note: requires you call glUseProgram on this shader first
+	// note: requires you to call glUseProgram on this shader first
 	void ShaderProgram::setGlobalFloatValue(float value, const char name[])
 	{
 		int valRef = glGetUniformLocation(shaderID, name);
 		glUniform1f(valRef, value);
 	}
 
-	// note: requires you call glUseProgram on this shader first
+	// note: requires you to call glUseProgram on this shader first
 	void ShaderProgram::setGlobalBoolValue(bool value, const char name[])
 	{
 		int valRef = glGetUniformLocation(shaderID, name);
 		glUniform1i(valRef, (int)value);
 	}
 
-	// note: requires you call glUseProgram on this shader first
+	// note: requires you to call glUseProgram on this shader first
 	void ShaderProgram::setGlobalIntValue(int value, const char name[])
 	{
 		int valRef = glGetUniformLocation(shaderID, name);

@@ -4,7 +4,10 @@
 #include <cmath>
 #include <GLAD/glad/glad.h>
 #include <glfw-3.3.7/include/GLFW/glfw3.h>
-#include "libraries/stb_image.h";
+#include <glm/glm/glm.hpp>
+#include <glm/glm/gtc/matrix_transform.hpp>
+#include <glm/glm/gtc/type_ptr.hpp>
+#include "libraries/stb_image.h"
 
 #include "Input.h"
 #include "Color.h"
@@ -15,6 +18,7 @@ using namespace GayCubes;
 
 int main()
 {
+
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -79,6 +83,7 @@ int main()
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
+	// bind textures
 	Texture tex1 = Texture::Texture(0, "textures/container.jpg", false);
 	tex1.loadTexture();
 
@@ -102,6 +107,15 @@ int main()
 		// define texture and shader
 		tex1.bindTexture();
 		tex2.bindTexture();
+
+		// create transformation matrix
+		glm::mat4 trans = glm::mat4(1.0f);
+		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0, 0.0, 1.0));
+		trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+		//trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+
+		// bind transformation matrix
+		shader.setGlobalMatrix4Value(trans, "transform");
 		
 		// draw object
 		glBindVertexArray(VAO);

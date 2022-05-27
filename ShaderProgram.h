@@ -2,6 +2,9 @@
 #define _SHADER_PROGRAM
 
 #include <GLAD/glad/glad.h>
+#include <glm/glm/glm.hpp>
+#include <glm/glm/gtc/matrix_transform.hpp>
+#include <glm/glm/gtc/type_ptr.hpp>
 
 #include <string>
 #include <fstream>
@@ -21,6 +24,7 @@ namespace GayCubes
 		void deallocateProgram();
 		
 		// uniform value setters
+		void setGlobalMatrix4Value(glm::mat4 matrix, const char name[]);
 		void setGlobalVec4Value(float value[], const char name[]);
 		void setGlobalFloatValue(float value, const char name[]);
 		void setGlobalBoolValue(bool value, const char name[]);
