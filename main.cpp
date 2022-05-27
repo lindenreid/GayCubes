@@ -109,14 +109,29 @@ int main()
 		tex2.bindTexture();
 
 		// create transformation matrix
+		float t = (float)glfwGetTime();
 		glm::mat4 trans = glm::mat4(1.0f);
-		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0, 0.0, 1.0));
+		trans = glm::rotate(trans, t, glm::vec3(0.0, 0.0, 1.0));
 		trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
 		//trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
 
 		// bind transformation matrix
 		shader.setGlobalMatrix4Value(trans, "transform");
 		
+		// draw object
+		glBindVertexArray(VAO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		// create transformation matrix
+		glm::mat4 trans2 = glm::mat4(1.0f);
+		//trans2 = glm::rotate(trans2, (float)glfwGetTime(), glm::vec3(0.0, 0.0, 1.0));
+		trans2 = glm::translate(trans2, glm::vec3(-0.5f, 0.5f, 0.0f));
+		float sint = static_cast<float>(std::sin(t));
+		trans2 = glm::scale(trans2, glm::vec3(sint, sint, sint));
+
+		// bind transformation matrix
+		shader.setGlobalMatrix4Value(trans2, "transform");
+
 		// draw object
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
