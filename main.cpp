@@ -96,6 +96,19 @@ int main()
 		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f	
 	};
 
+	glm::vec3 cubePositions[] = {
+		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(2.0f,  5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
+
 	// bind vertices & indices
 	unsigned int VAO, VBO; // , EBO;
 	glGenVertexArrays(1, &VAO);
@@ -148,25 +161,27 @@ int main()
 		tex1.bindTexture();
 		tex2.bindTexture();
 
-		// create model matrix
-	// this makes our plane rotated towards the ground
-		glm::mat4 model = glm::mat4(1.0f);
-		float t = (float)glfwGetTime();
-		model = glm::rotate(model, t * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-
 		// create view matrix
 		// this moves our camera back from the origin a lil bit on the z axis
 		glm::mat4 view = glm::mat4(1.0f);
 		view = glm::translate(view, glm::vec3(0.0, 0.0f, -3.0f));
 
 		// bind transformation matrices
-		shader.setGlobalMatrix4Value(model, "model");
 		shader.setGlobalMatrix4Value(view, "view");
 		shader.setGlobalMatrix4Value(proj, "projection");
 		
 		// draw object
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			shader.setGlobalMatrix4Value(model, "model");
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		// draw window
