@@ -18,14 +18,16 @@ using namespace GayCubes;
 
 int main()
 {
-
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, false);
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "GayCubes", NULL, NULL);
+	int windowWidth = 800;
+	int windowHeight = 600;
+
+	GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "GayCubes", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window." << std::endl;
@@ -41,7 +43,7 @@ int main()
 		return -1;
 	}
 
-	glViewport(0, 0, 800, 600);
+	glViewport(0, 0, windowWidth, windowHeight);
 
 	// shader program
 	ShaderProgram shader = ShaderProgram::ShaderProgram("shaders/rainbowVertex.glsl", "shaders/rainbowFrag.glsl");
@@ -94,6 +96,9 @@ int main()
 	shader.setGlobalIntValue(0, "texture1");
 	shader.setGlobalIntValue(1, "texture2");
 
+	// create perspective projection matrix
+	glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
+
 	// render loop
 	// TODO: double buffering
 	while (!glfwWindowShouldClose(window))
@@ -108,30 +113,21 @@ int main()
 		tex1.bindTexture();
 		tex2.bindTexture();
 
-		// create transformation matrix
-		float t = (float)glfwGetTime();
-		glm::mat4 trans = glm::mat4(1.0f);
-		trans = glm::rotate(trans, t, glm::vec3(0.0, 0.0, 1.0));
-		trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
-		//trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+		// create model matrix
+	// this makes our plane rotated towards the ground
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
-		// bind transformation matrix
-		shader.setGlobalMatrix4Value(trans, "transform");
+		// create view matrix
+		// this moves our camera back from the origin a lil bit on the z axis
+		glm::mat4 view = glm::mat4(1.0f);
+		view = glm::translate(view, glm::vec3(0.0, 0.0f, -3.0f));
+
+		// bind transformation matrices
+		shader.setGlobalMatrix4Value(model, "model");
+		shader.setGlobalMatrix4Value(view, "view");
+		shader.setGlobalMatrix4Value(proj, "projection");
 		
-		// draw object
-		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-		// create transformation matrix
-		glm::mat4 trans2 = glm::mat4(1.0f);
-		//trans2 = glm::rotate(trans2, (float)glfwGetTime(), glm::vec3(0.0, 0.0, 1.0));
-		trans2 = glm::translate(trans2, glm::vec3(-0.5f, 0.5f, 0.0f));
-		float sint = static_cast<float>(std::sin(t));
-		trans2 = glm::scale(trans2, glm::vec3(sint, sint, sint));
-
-		// bind transformation matrix
-		shader.setGlobalMatrix4Value(trans2, "transform");
-
 		// draw object
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
