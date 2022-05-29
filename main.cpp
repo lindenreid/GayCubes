@@ -45,6 +45,9 @@ int main()
 
 	glViewport(0, 0, windowWidth, windowHeight);
 
+	// enable depth buffer
+	glEnable(GL_DEPTH_TEST);
+
 	// shader program
 	ShaderProgram shader = ShaderProgram::ShaderProgram("shaders/rainbowVertex.glsl", "shaders/rainbowFrag.glsl");
 
@@ -139,7 +142,7 @@ int main()
 
 		Color gray = Color::grayMid;
 		glClearColor(gray.r, gray.g, gray.b, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		// define texture and shader
 		tex1.bindTexture();
