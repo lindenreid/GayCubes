@@ -13,6 +13,7 @@
 #include "Color.h"
 #include "ShaderProgram.h"
 #include "Texture.h"
+#include "Camera.h"
 
 using namespace GayCubes;
 
@@ -50,6 +51,13 @@ int main()
 
 	// shader program
 	ShaderProgram shader = ShaderProgram::ShaderProgram("shaders/rainbowVertex.glsl", "shaders/rainbowFrag.glsl");
+
+	// camera
+	Camera camera = Camera::Camera(
+		glm::vec3(0.0f, 0.0f, 3.0f),	// position
+		glm::vec3(0.0f, 0.0f, 0.0f),	// target
+		glm::vec3(0.0f, 1.0f, 0.0f)		// world up
+	);
 
 	// rect in NDC
 	float cubeVerts[] = {
@@ -149,7 +157,7 @@ int main()
 	while (!glfwWindowShouldClose(window))
 	{
 		Input::processInput(window);
-		float t = glfwGetTime();
+		camera.Update();
 
 		Color gray = Color::grayMid;
 		glClearColor(gray.r, gray.g, gray.b, 1.0f);
@@ -162,14 +170,8 @@ int main()
 		// create perspective projection matrix
 		glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
 
-		// create view matrix
-		// this moves our camera back from the origin a lil bit on the z axis
-		glm::mat4 view = glm::mat4(1.0f);
-		view = glm::translate(view, glm::vec3(0.0, 0.0f, -10.0f));
-		view = glm::rotate(view, glm::radians(20.0f * t), glm::vec3(0.0f, 1.0f, 0.0f));
-
 		// bind transformation matrices
-		shader.setGlobalMatrix4Value(view, "view");
+		shader.setGlobalMatrix4Value(camera.viewMatrix(), "view");
 		shader.setGlobalMatrix4Value(proj, "projection");
 		
 		// draw object
