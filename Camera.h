@@ -10,20 +10,18 @@ namespace GayCubes
 	class Camera
 	{
 	public:
-		Camera(glm::vec3 position, glm::vec3 target, glm::vec3 worldUp);
+		Camera(glm::vec3 position, glm::vec3 worldUp);
 		
-		void Update();
+		void Update(glm::vec4 input);
 
-		glm::mat4 viewMatrix() { return glm::lookAt(position, target, worldUp); }
+		glm::mat4 viewMatrix() { return glm::lookAt(position, position+front(), worldUp); }
 
 	private:
 		glm::vec3 position;
-		glm::vec3 target;
 		glm::vec3 worldUp;
 
-		glm::vec3 direction () {return glm::normalize(position - target);}
-		glm::vec3 right() { return glm::normalize(glm::cross(worldUp, direction()));}
-		glm::vec3 localUp() { return glm::cross(direction(), right()); }
+		glm::vec3 front() { return glm::vec3(0.0f, 0.0f, -1.0f); }
+		glm::vec3 right() { return glm::normalize(glm::cross(front(), worldUp)); };
 	};
 }
 

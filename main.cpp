@@ -55,7 +55,6 @@ int main()
 	// camera
 	Camera camera = Camera::Camera(
 		glm::vec3(0.0f, 0.0f, 3.0f),	// position
-		glm::vec3(0.0f, 0.0f, 0.0f),	// target
 		glm::vec3(0.0f, 1.0f, 0.0f)		// world up
 	);
 
@@ -156,8 +155,8 @@ int main()
 	// TODO: double buffering
 	while (!glfwWindowShouldClose(window))
 	{
-		Input::processInput(window);
-		camera.Update();
+		glm::vec4 input = Input::processInput(window);
+		camera.Update(input);
 
 		Color gray = Color::grayMid;
 		glClearColor(gray.r, gray.g, gray.b, 1.0f);
