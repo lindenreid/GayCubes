@@ -144,14 +144,12 @@ int main()
 	shader.setGlobalIntValue(0, "texture1");
 	shader.setGlobalIntValue(1, "texture2");
 
-	// create perspective projection matrix
-	glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
-
 	// render loop
 	// TODO: double buffering
 	while (!glfwWindowShouldClose(window))
 	{
 		Input::processInput(window);
+		float t = glfwGetTime();
 
 		Color gray = Color::grayMid;
 		glClearColor(gray.r, gray.g, gray.b, 1.0f);
@@ -161,10 +159,14 @@ int main()
 		tex1.bindTexture();
 		tex2.bindTexture();
 
+		// create perspective projection matrix
+		glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
+
 		// create view matrix
 		// this moves our camera back from the origin a lil bit on the z axis
 		glm::mat4 view = glm::mat4(1.0f);
-		view = glm::translate(view, glm::vec3(0.0, 0.0f, -3.0f));
+		view = glm::translate(view, glm::vec3(0.0, 0.0f, -10.0f));
+		view = glm::rotate(view, glm::radians(20.0f * t), glm::vec3(0.0f, 1.0f, 0.0f));
 
 		// bind transformation matrices
 		shader.setGlobalMatrix4Value(view, "view");
