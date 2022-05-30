@@ -109,6 +109,13 @@ namespace GayCubes
 	}
 
 	// note: requires you to call glUseProgram on this shader first
+	void ShaderProgram::setGlobalVec3Value(float value[], const char name[])
+	{
+		int valRef = glGetUniformLocation(shaderID, name);
+		glUniform3f(valRef, value[0], value[1], value[2]);
+	}
+
+	// note: requires you to call glUseProgram on this shader first
 	void ShaderProgram::setGlobalFloatValue(float value, const char name[])
 	{
 		int valRef = glGetUniformLocation(shaderID, name);

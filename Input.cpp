@@ -57,8 +57,8 @@ namespace GayCubes
 		}
 		*/
 
-		std::cout << "xy: " << xpos << "," << ypos << std::endl;
-		std::cout << "last xy: " << _lastX << "," << _lastY << std::endl;
+		//std::cout << "xy: " << xpos << "," << ypos << std::endl;
+		//std::cout << "last xy: " << _lastX << "," << _lastY << std::endl;
 		
 		output.mouse = glm::vec4(
 			xpos,
@@ -69,7 +69,7 @@ namespace GayCubes
 		_lastX = xpos;
 		_lastY = ypos;
 
-		std::cout << "zw: " << output.mouse.z << "," << output.mouse.w << std::endl;
+		//std::cout << "zw: " << output.mouse.z << "," << output.mouse.w << std::endl;
 
 		return output;
 	}

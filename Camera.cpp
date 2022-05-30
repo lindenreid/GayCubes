@@ -14,7 +14,7 @@ namespace GayCubes
 		this->_position = position;
 		this->_worldUp = worldUp;
 
-		yaw = 90.0f;
+		yaw = -90.0f;
 		pitch = 0.0f;
 	}
 

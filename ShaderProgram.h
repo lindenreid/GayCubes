@@ -25,7 +25,10 @@ namespace GayCubes
 		
 		// uniform value setters
 		void setGlobalMatrix4Value(glm::mat4 matrix, const char name[]);
+		
 		void setGlobalVec4Value(float value[], const char name[]);
+		void setGlobalVec3Value(float value[], const char name[]);
+		
 		void setGlobalFloatValue(float value, const char name[]);
 		void setGlobalBoolValue(bool value, const char name[]);
 		void setGlobalIntValue(int value, const char name[]);
