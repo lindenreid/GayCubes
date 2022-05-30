@@ -5,6 +5,8 @@
 #include <glm/glm/gtc/matrix_transform.hpp>
 #include <glm/glm/gtc/type_ptr.hpp>
 
+#include "Time.h"
+
 namespace GayCubes
 {
 	class Camera
@@ -12,7 +14,7 @@ namespace GayCubes
 	public:
 		Camera(glm::vec3 position, glm::vec3 worldUp);
 		
-		void Update(glm::vec4 input);
+		void Update(glm::vec4 input, Time time);
 
 		glm::mat4 viewMatrix() { return glm::lookAt(position, position+front(), worldUp); }
 

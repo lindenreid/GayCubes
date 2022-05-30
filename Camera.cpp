@@ -5,6 +5,7 @@
 #include <glm/glm/gtc/type_ptr.hpp>
 
 #include "Camera.h"
+#include "Time.h"
 
 namespace GayCubes
 {
@@ -14,9 +15,9 @@ namespace GayCubes
 		this->worldUp = worldUp;
 	}
 
-	void Camera::Update(glm::vec4 input)
+	void Camera::Update(glm::vec4 input, Time time)
 	{
-		const float speed = 0.001f;
+		const float speed = 2.5f * time.DeltaTime();
 
 		glm::vec3 front = this->front();
 		glm::vec3 right = this->right();

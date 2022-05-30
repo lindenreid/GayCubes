@@ -14,6 +14,7 @@
 #include "ShaderProgram.h"
 #include "Texture.h"
 #include "Camera.h"
+#include "Time.h"
 
 using namespace GayCubes;
 
@@ -57,6 +58,10 @@ int main()
 		glm::vec3(0.0f, 0.0f, 3.0f),	// position
 		glm::vec3(0.0f, 1.0f, 0.0f)		// world up
 	);
+
+	// time
+	Time time = Time::Time();
+	time.Initialize();
 
 	// rect in NDC
 	float cubeVerts[] = {
@@ -155,8 +160,9 @@ int main()
 	// TODO: double buffering
 	while (!glfwWindowShouldClose(window))
 	{
+		time.Update();
 		glm::vec4 input = Input::processInput(window);
-		camera.Update(input);
+		camera.Update(input, time);
 
 		Color gray = Color::grayMid;
 		glClearColor(gray.r, gray.g, gray.b, 1.0f);
