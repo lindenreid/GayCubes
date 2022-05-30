@@ -38,6 +38,9 @@ int main()
 	}
 	glfwMakeContextCurrent(window);
 
+	// set up input capture
+	Input input = Input::Input(window);
+
 	// GLAD manages function pointers for OpenGL
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -161,8 +164,8 @@ int main()
 	while (!glfwWindowShouldClose(window))
 	{
 		time.Update();
-		glm::vec4 input = Input::processInput(window);
-		camera.Update(input, time);
+		InputInfo inputInfo = input.processInput();
+		camera.Update(inputInfo, time);
 
 		Color gray = Color::grayMid;
 		glClearColor(gray.r, gray.g, gray.b, 1.0f);

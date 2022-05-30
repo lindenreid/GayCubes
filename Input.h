@@ -1,7 +1,6 @@
 #ifndef _WINDOW_INPUT
 #define _WINDOW_INPUT
 
-#include <GLAD/glad/glad.h>
 #include <glfw-3.3.7/include/GLFW/glfw3.h>
 #include <glm/glm/glm.hpp>
 #include <glm/glm/gtc/matrix_transform.hpp>
@@ -9,10 +8,23 @@
 
 namespace GayCubes
 {
+	struct InputInfo
+	{
+		glm::vec4 wasd;
+		glm::vec4 mouse; //xpos, ypos, xoffset, yoffset
+	};
+
 	class Input
 	{
 	public:
-		static glm::vec4 processInput(GLFWwindow* window);
+		Input(GLFWwindow* window);
+		InputInfo processInput();
+
+	private:
+		GLFWwindow* _window;
+		float _lastX;
+		float _lastY;
+		bool _firstFrame;
 	};
 }
 

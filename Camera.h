@@ -5,6 +5,7 @@
 #include <glm/glm/gtc/matrix_transform.hpp>
 #include <glm/glm/gtc/type_ptr.hpp>
 
+#include "Input.h"
 #include "Time.h"
 
 namespace GayCubes
@@ -14,16 +15,20 @@ namespace GayCubes
 	public:
 		Camera(glm::vec3 position, glm::vec3 worldUp);
 		
-		void Update(glm::vec4 input, Time time);
+		void Update(InputInfo input, Time time);
 
-		glm::mat4 viewMatrix() { return glm::lookAt(position, position+front(), worldUp); }
+		glm::mat4 viewMatrix() { return glm::lookAt(_position, _position+_front, _worldUp); }
 
 	private:
-		glm::vec3 position;
-		glm::vec3 worldUp;
+		const float _sensitivity = 0.05f;
+		float yaw;
+		float pitch;
 
-		glm::vec3 front() { return glm::vec3(0.0f, 0.0f, -1.0f); }
-		glm::vec3 right() { return glm::normalize(glm::cross(front(), worldUp)); };
+		glm::vec3 _position;
+		glm::vec3 _worldUp;
+
+		glm::vec3 _front = glm::vec3(0.0f, 0.0f, -1.0f);
+		glm::vec3 right() { return glm::normalize(glm::cross(_front, _worldUp)); };
 	};
 }
 

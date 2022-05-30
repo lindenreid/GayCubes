@@ -11,19 +11,41 @@ namespace GayCubes
 {
 	Camera::Camera(glm::vec3 position, glm::vec3 worldUp)
 	{
-		this->position = position;
-		this->worldUp = worldUp;
+		this->_position = position;
+		this->_worldUp = worldUp;
+
+		yaw = 90.0f;
+		pitch = 0.0f;
 	}
 
-	void Camera::Update(glm::vec4 input, Time time)
+	void Camera::Update(InputInfo input, Time time)
 	{
 		const float speed = 2.5f * time.DeltaTime();
 
-		glm::vec3 front = this->front();
+		glm::vec3 front = this->_front;
 		glm::vec3 right = this->right();
-		position += input.x * speed * front;
-		position -= input.y * speed * front;
-		position -= input.z * speed * right;
-		position += input.w * speed * right;
+		_position += input.wasd.x * speed * front;
+		_position -= input.wasd.y * speed * front;
+		_position -= input.wasd.z * speed * right;
+		_position += input.wasd.w * speed * right;
+
+		glm::vec3 direction = glm::vec3(0.0f);
+
+		yaw += input.mouse.z * _sensitivity;
+		pitch -= input.mouse.w * _sensitivity;
+		if (pitch > 89.0f)
+		{
+			pitch = 89.0f;
+		}
+		else if (pitch < -89.0f)
+		{
+			pitch = -89.0f;
+		}
+
+		direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+		direction.y = sin(glm::radians(pitch));
+		direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+
+		_front = glm::normalize(direction);
 	}
 }
