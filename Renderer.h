@@ -14,7 +14,7 @@
 #include "Camera.h"
 #include "Texture.h"
 #include "Material.h"
-#include "Light.h"
+#include "SceneLighting.h"
 
 namespace GayCubes
 {
@@ -23,8 +23,7 @@ namespace GayCubes
 	public:
 		Renderer(const char *path, Material mat);
 		// TODO: store positional information in a Transform
-		// TODO: store scene light information elsewhere
-		void draw(Camera camera, Light light, glm::vec3 position, glm::vec3 scale);
+		void draw(Camera camera, SceneLighting lighting, glm::vec3 position, glm::vec3 scale);
 		void deallocate();
 
 	private:

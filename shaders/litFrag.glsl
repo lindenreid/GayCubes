@@ -12,9 +12,13 @@ in vec3 positionWS;
 uniform sampler2D texture1;
 uniform sampler2D texture2;
 uniform vec3 albedo;
+
 uniform vec3 lightColor;
 uniform float lightStrength;
 uniform vec3 lightPos;
+
+uniform vec3 ambientColor;
+uniform float ambientStrength;
 
 void main ()
 {
@@ -24,6 +28,8 @@ void main ()
     vec3 lightDir = normalize(lightPos - positionWS);
     float diff = max(dot(norm, lightDir), 0.0f);
     vec4 diffuse = vec4(diff * lightColor, 1);
+
+    diffuse.rgb += ambientColor * ambientStrength;
 
     FragColor = tex1 * diffuse;
 }

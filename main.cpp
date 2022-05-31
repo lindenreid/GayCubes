@@ -23,6 +23,7 @@
 #include "Mesh.h"
 #include "Renderer.h"
 #include "Light.h"
+#include "SceneLighting.h"
 
 using namespace GayCubes;
 
@@ -91,8 +92,8 @@ int main()
 	// -----------------------------
 	glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 	glm::vec3 lightDir(0.0f, -1.0f, 0.0f);
-	Color lightColor = Color(0.8f, 0.8f, 1.0f);
-	Light light = Light(1.0f, lightPos, lightDir, lightColor);
+	Color lightColor = Color(0.7f, 0.7f, 1.0f);
+	SceneLighting lighting = SceneLighting(Light(1.0f, lightPos, lightDir, lightColor));
 
 	// light debug renderer
 	// -----------------------------
@@ -118,8 +119,8 @@ int main()
 
 		// draw all renderers
 		// -----------------------------
-		renderer.draw(camera, light, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-		lightRenderer.draw(camera, light, light._position, glm::vec3(0.2f, 0.2f, 0.2f));
+		renderer.draw(camera, lighting._mainDirectionalLight, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+		lightRenderer.draw(camera, lighting._mainDirectionalLight, lighting._mainDirectionalLight._position, glm::vec3(0.2f, 0.2f, 0.2f));
 
 		// draw window
 		glfwSwapBuffers(window);

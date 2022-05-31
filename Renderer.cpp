@@ -24,6 +24,7 @@
 #include "Texture.h"
 #include "Material.h"
 #include "Light.h"
+#include "SceneLighting.h"
 
 namespace GayCubes
 {
@@ -121,17 +122,21 @@ namespace GayCubes
 	}
 
 	// ------------------------------------------------------------------------
-	void Renderer::draw(Camera camera, Light light, glm::vec3 position, glm::vec3 scale)
+	void Renderer::draw(Camera camera, SceneLighting lighting, glm::vec3 position, glm::vec3 scale)
 	{
 		ShaderProgram shader = _material.Shader;
 
 		shader.useProgram();
 
 		float l[3];
-		float* lightColor = light._color.toArray(l);
+		float* lightColor = lighting._mainDirectionalLight._color.toArray(l);
 		shader.setGlobalVec3Value(lightColor, "lightColor");
-		shader.setGlobalVec3Value(glm::value_ptr(light._position), "lightPos");
-		shader.setGlobalFloatValue(light._strength, "lightStrength");
+		shader.setGlobalVec3Value(glm::value_ptr(lighting._mainDirectionalLight._position), "lightPos");
+		shader.setGlobalFloatValue(lighting._mainDirectionalLight._strength, "lightStrength");
+
+		lightColor = lighting._ambientColor.toArray(l);
+		shader.setGlobalVec3Value(lightColor, "ambientColor");
+		shader.setGlobalFloatValue(lighting._ambientStrength, "ambientStrength");
 
 		float coral[3] = {1.0f, 1.0f, 1.0f};
 		shader.setGlobalVec3Value(coral, "albedo");
