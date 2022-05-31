@@ -1,7 +1,7 @@
 #include <iostream>
 #include <GLAD/glad/glad.h>
 #include <glfw-3.3.7/include/GLFW/glfw3.h>
-#include "libraries/stb_image.h";
+#include "libraries/stb_image.h"
 
 #include "Texture.h"
 
