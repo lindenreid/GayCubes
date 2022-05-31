@@ -94,10 +94,10 @@ namespace GayCubes
 
 			if (mesh->mTextureCoords[0])
 			{
-				glm::vec2 vec;
-				vec.x = mesh->mTextureCoords[0][i].x;
-				vec.y = mesh->mTextureCoords[0][i].y;
-				vertex.TexCoords = vec;
+				glm::vec2 vecc;
+				vecc.x = mesh->mTextureCoords[0][i].x;
+				vecc.y = mesh->mTextureCoords[0][i].y;
+				vertex.TexCoords = vecc;
 			}
 			else
 			{

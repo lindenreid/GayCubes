@@ -65,8 +65,7 @@ int main()
 
 	// shader program
 	ShaderProgram shader = ShaderProgram::ShaderProgram("shaders/rainbowVertex.glsl", "shaders/rainbowFrag.glsl");
-	ShaderProgram lightShader = ShaderProgram::ShaderProgram("shaders/lightVertex.glsl", "shaders/lightFrag.glsl");
-
+	
 	// textures
 	Texture tex1 = Texture::Texture(0, "../resources/models/backpack/diffuse.jpg", false);
 	Texture tex2 = Texture::Texture(1, "../resources/textures/awesomeFace.png", true);
