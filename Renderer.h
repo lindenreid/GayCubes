@@ -7,11 +7,14 @@
 #include <assimp-3.1.1/include/assimp/scene.h>
 #include <assimp-3.1.1/include/assimp/postprocess.h>
 
+#include <glm/glm/glm.hpp>
+
 #include "ShaderProgram.h"
 #include "Mesh.h"
 #include "Camera.h"
 #include "Texture.h"
 #include "Material.h"
+#include "Light.h"
 
 namespace GayCubes
 {
@@ -19,7 +22,9 @@ namespace GayCubes
 	{
 	public:
 		Renderer(const char *path, Material mat);
-		void draw(Camera camera, float* lightColor);
+		// TODO: store positional information in a Transform
+		// TODO: store scene light information elsewhere
+		void draw(Camera camera, Light light, glm::vec3 position, glm::vec3 scale);
 		void deallocate();
 
 	private:

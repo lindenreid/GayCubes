@@ -22,6 +22,7 @@
 #include "Material.h"
 #include "Mesh.h"
 #include "Renderer.h"
+#include "Light.h"
 
 using namespace GayCubes;
 
@@ -61,20 +62,19 @@ int main()
 	// enable depth buffer
 	glEnable(GL_DEPTH_TEST);
 
-	// shader program
+	// model renderer
+	// -----------------------------
 	ShaderProgram shader = ShaderProgram::ShaderProgram("shaders/rainbowVertex.glsl", "shaders/rainbowFrag.glsl");
 	
-	// textures
 	Texture tex1 = Texture::Texture(0, "../resources/models/deer/textures/albedo.jpg", false, false);
 	Texture tex2 = Texture::Texture(1, "../resources/textures/awesomeFace.png", true, true);
 
-	// materials
 	Material material = Material::Material(shader, tex1, tex2);
 
-	// renderer
 	Renderer renderer = Renderer::Renderer("../resources/models/deer/deer.obj", material);
 
 	// camera
+	// -----------------------------
 	Camera camera = Camera::Camera(
 		(float)windowWidth,
 		(float)windowHeight,
@@ -83,14 +83,21 @@ int main()
 	);
 
 	// time
+	// -----------------------------
 	Time time = Time::Time();
 	time.Initialize();
 
-	// setup light info
-	// TODO: make a Light class
-	float l[3];
-	float* lightColor = Color::blue.toArray(l);
+	// light
+	// -----------------------------
 	glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+	glm::vec3 lightDir(0.0f, -1.0f, 0.0f);
+	Light light = Light(0.5f, lightPos, lightDir, Color::white);
+
+	// light debug renderer
+	// -----------------------------
+	ShaderProgram lightShader = ShaderProgram::ShaderProgram("shaders/lightVertex.glsl", "shaders/lightFrag.glsl");
+	Material lightMat = Material::Material(lightShader, tex1, tex2); // TODO: material constructor that doesn't require textures
+	Renderer lightRenderer = Renderer::Renderer("../resources/models/oval.obj", lightMat);
 
 	// render loop
 	// TODO: double buffering
@@ -110,7 +117,8 @@ int main()
 
 		// draw all renderers
 		// -----------------------------
-		renderer.draw(camera, lightColor);
+		renderer.draw(camera, light, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+		lightRenderer.draw(camera, light, light._position, glm::vec3(0.2f, 0.2f, 0.2f));
 
 		// draw window
 		glfwSwapBuffers(window);

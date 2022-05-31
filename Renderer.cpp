@@ -23,6 +23,7 @@
 #include "Color.h"
 #include "Texture.h"
 #include "Material.h"
+#include "Light.h"
 
 namespace GayCubes
 {
@@ -120,12 +121,16 @@ namespace GayCubes
 	}
 
 	// ------------------------------------------------------------------------
-	void Renderer::draw(Camera camera, float* lightColor)
+	void Renderer::draw(Camera camera, Light light, glm::vec3 position, glm::vec3 scale)
 	{
 		ShaderProgram shader = _material.Shader;
 
 		shader.useProgram();
+
+		float l[3];
+		float* lightColor = light._color.toArray(l);
 		shader.setGlobalVec3Value(lightColor, "lightColor");
+		shader.setGlobalFloatValue(light._strength, "lightStrength");
 
 		float coral[3] = {1.0f, 1.0f, 1.0f};
 		shader.setGlobalVec3Value(coral, "albedo");
@@ -133,7 +138,8 @@ namespace GayCubes
 		shader.setGlobalMatrix4Value(camera.projection(), "projection");
 		shader.setGlobalMatrix4Value(camera.viewMatrix(), "view");
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 3.0f));
+		model = glm::translate(model, position);
+		model = glm::scale(model, scale);
 		shader.setGlobalMatrix4Value(model, "model");
 
 		// define textures

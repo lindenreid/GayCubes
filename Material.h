@@ -9,7 +9,7 @@ namespace GayCubes
 		ShaderProgram Shader;
 		Texture tex1;
 		Texture tex2;
-
+		
 		Material(ShaderProgram shader, Texture tex1, Texture tex2);
 		void bindResources();
 		void deallocate();
