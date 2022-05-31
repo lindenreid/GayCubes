@@ -62,7 +62,7 @@ int main()
 	// enable depth buffer
 	glEnable(GL_DEPTH_TEST);
 
-	// model renderer
+	// deer model renderer
 	// -----------------------------
 	ShaderProgram shader = ShaderProgram::ShaderProgram("shaders/litVertex.glsl", "shaders/litFrag.glsl");
 	
@@ -91,7 +91,8 @@ int main()
 	// -----------------------------
 	glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 	glm::vec3 lightDir(0.0f, -1.0f, 0.0f);
-	Light light = Light(0.5f, lightPos, lightDir, Color::white);
+	Color lightColor = Color(0.8f, 0.8f, 1.0f);
+	Light light = Light(1.0f, lightPos, lightDir, lightColor);
 
 	// light debug renderer
 	// -----------------------------

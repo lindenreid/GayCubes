@@ -130,6 +130,7 @@ namespace GayCubes
 		float l[3];
 		float* lightColor = light._color.toArray(l);
 		shader.setGlobalVec3Value(lightColor, "lightColor");
+		shader.setGlobalVec3Value(glm::value_ptr(light._position), "lightPos");
 		shader.setGlobalFloatValue(light._strength, "lightStrength");
 
 		float coral[3] = {1.0f, 1.0f, 1.0f};
@@ -141,6 +142,9 @@ namespace GayCubes
 		model = glm::translate(model, position);
 		model = glm::scale(model, scale);
 		shader.setGlobalMatrix4Value(model, "model");
+		glm::mat4 modelIT = glm::inverse(model);
+		modelIT = glm::transpose(modelIT);
+		shader.setGlobalMatrix4Value(modelIT, "model_inv_trans");
 
 		// define textures
 		shader.setGlobalIntValue(0, "texture1");
