@@ -165,7 +165,6 @@
     <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="models\backpack.fbx" />
     <None Include="shaders\lightFrag.glsl" />
     <None Include="shaders\lightVertex.glsl" />
     <None Include="shaders\rainbowVertex.glsl" />

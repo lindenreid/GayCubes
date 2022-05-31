@@ -31,6 +31,11 @@ namespace GayCubes
 		: _material(mat)
 	{
 		loadModel(path);
+
+		for (int i = 0; i < _meshes.size(); i++)
+		{
+			_meshes[i].bindMesh();
+		}
 	}
 
 	// ------------------------------------------------------------------------
@@ -128,6 +133,7 @@ namespace GayCubes
 		shader.setGlobalMatrix4Value(camera.projection(), "projection");
 		shader.setGlobalMatrix4Value(camera.viewMatrix(), "view");
 		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 3.0f));
 		shader.setGlobalMatrix4Value(model, "model");
 
 		// define textures
@@ -138,7 +144,6 @@ namespace GayCubes
 		// draw verts
 		for (int i = 0; i < _meshes.size(); i++)
 		{
-			_meshes[i].bindMesh();
 			_meshes[i].drawMesh();
 		}
 	}

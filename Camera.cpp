@@ -14,7 +14,7 @@ namespace GayCubes
 		this->_position = position;
 		this->_worldUp = worldUp;
 
-		yaw = -90.0f;
+		yaw = 0.0f;
 		pitch = 0.0f;
 
 		_projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);

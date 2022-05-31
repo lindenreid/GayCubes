@@ -89,7 +89,6 @@
     <None Include="shaders\rainbowFrag.glsl" />
     <None Include="shaders\lightFrag.glsl" />
     <None Include="shaders\lightVertex.glsl" />
-    <None Include="models\backpack.fbx" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\container.jpg">

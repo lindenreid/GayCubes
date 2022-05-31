@@ -56,6 +56,8 @@ int main()
 		return -1;
 	}
 
+	stbi_set_flip_vertically_on_load(true);
+
 	glViewport(0, 0, windowWidth, windowHeight);
 
 	// enable depth buffer
@@ -66,14 +68,14 @@ int main()
 	ShaderProgram lightShader = ShaderProgram::ShaderProgram("shaders/lightVertex.glsl", "shaders/lightFrag.glsl");
 
 	// textures
-	Texture tex1 = Texture::Texture(0, "textures/container.jpg", false);
-	Texture tex2 = Texture::Texture(1, "textures/awesomeFace.png", true);
+	Texture tex1 = Texture::Texture(0, "../resources/models/backpack/diffuse.jpg", false);
+	Texture tex2 = Texture::Texture(1, "../resources/textures/awesomeFace.png", true);
 
 	// materials
 	Material material = Material::Material(shader, tex1, tex2);
 
 	// renderer
-	Renderer renderer = Renderer::Renderer("models/backpack.fbx", material);
+	Renderer renderer = Renderer::Renderer("../resources/models/backpack/backpack.obj", material);
 
 	// camera
 	Camera camera = Camera::Camera(
