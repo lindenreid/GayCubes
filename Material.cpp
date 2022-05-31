@@ -24,7 +24,7 @@ namespace GayCubes
 	{
 		tex1.bindTexture();
 		tex2.bindTexture();
-		glActiveTexture(GL_TEXTURE0);
+		//glActiveTexture(GL_TEXTURE0);
 	}
 
 	void Material::deallocate()
