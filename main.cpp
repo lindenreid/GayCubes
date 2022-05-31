@@ -116,6 +116,14 @@ int main()
 		glClearColor(gray.r, gray.g, gray.b, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		// move light around
+		glm::mat4 trans = glm::mat4(1.0f);
+		float t = time.GetTime();
+		float radius = 5.0f;
+		float speed = 1.0f;
+		lighting._mainDirectionalLight._position.x = 1.0f + std::sin(t * speed) * radius;
+		lighting._mainDirectionalLight._position.z = std::cos(t * speed) * radius;
+
 		// draw all renderers
 		// -----------------------------
 		renderer.draw(camera, lighting._mainDirectionalLight, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));

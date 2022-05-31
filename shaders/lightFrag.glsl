@@ -2,9 +2,14 @@
 
 out vec4 FragColor;
 
-uniform vec3 lightColor;
+struct Light {
+    vec3 lightColor;
+    float lightStrength;
+    vec3 lightPos;
+};
+uniform Light mainLight;
 
 void main ()
 {
-    FragColor = vec4(lightColor, 1);
+    FragColor = vec4(mainLight.lightColor, 1);
 }

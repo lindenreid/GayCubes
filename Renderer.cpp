@@ -128,22 +128,25 @@ namespace GayCubes
 
 		shader.useProgram();
 
+		// main light properties
 		float l[3];
 		float* lightColor = lighting._mainDirectionalLight._color.toArray(l);
-		shader.setGlobalVec3Value(lightColor, "lightColor");
-		shader.setGlobalVec3Value(glm::value_ptr(lighting._mainDirectionalLight._position), "lightPos");
-		shader.setGlobalFloatValue(lighting._mainDirectionalLight._strength, "lightStrength");
+		shader.setGlobalVec3Value(lightColor, "mainLight.lightColor");
+		shader.setGlobalVec3Value(glm::value_ptr(lighting._mainDirectionalLight._position), "mainLight.lightPos");
+		shader.setGlobalFloatValue(lighting._mainDirectionalLight._strength, "mainLight.lightStrength");
 
+		// scene properties
 		lightColor = lighting._ambientColor.toArray(l);
-		shader.setGlobalVec3Value(lightColor, "ambientColor");
-		shader.setGlobalFloatValue(lighting._ambientStrength, "ambientStrength");
+		shader.setGlobalVec3Value(lightColor, "scene.ambientColor");
+		shader.setGlobalFloatValue(lighting._ambientStrength, "scene.ambientStrength");
+		shader.setGlobalVec3Value(glm::value_ptr(camera._position), "scene.viewPos");
 
+		// material properties
 		float coral[3] = {1.0f, 1.0f, 1.0f};
-		shader.setGlobalVec3Value(coral, "albedo");
-		shader.setGlobalFloatValue(_material.specStrength, "specStrength");
+		shader.setGlobalVec3Value(coral, "material.albedo");
+		shader.setGlobalFloatValue(_material.specStrength, "material.specStrength");
 
-		shader.setGlobalVec3Value(glm::value_ptr(camera._position), "viewPos");
-
+		// transform matrices
 		shader.setGlobalMatrix4Value(camera.projection(), "projection");
 		shader.setGlobalMatrix4Value(camera.viewMatrix(), "view");
 		glm::mat4 model = glm::mat4(1.0f);
@@ -154,7 +157,7 @@ namespace GayCubes
 		modelIT = glm::transpose(modelIT);
 		shader.setGlobalMatrix4Value(modelIT, "model_inv_trans");
 
-		// define textures
+		// textures
 		shader.setGlobalIntValue(0, "texture1");
 		shader.setGlobalIntValue(1, "texture2");
 		_material.bindResources();

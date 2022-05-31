@@ -11,18 +11,27 @@ in vec3 positionWS;
 // material settings
 uniform sampler2D texture1;
 uniform sampler2D texture2;
-uniform vec3 albedo;
-uniform float specStrength;
+struct Material {
+    vec3 albedo;
+    float specStrength;
+};
+uniform Material material;
 
 // global vars
-uniform vec3 lightColor;
-uniform float lightStrength;
-uniform vec3 lightPos;
+struct Light {
+    vec3 lightColor;
+    float lightStrength;
+    vec3 lightPos;
+};
+uniform Light mainLight;
 
-uniform vec3 viewPos;
+struct SceneSettings {
+    vec3 viewPos;
+    vec3 ambientColor;
+    float ambientStrength;
+};
+uniform SceneSettings scene;
 
-uniform vec3 ambientColor;
-uniform float ambientStrength;
 
 void main ()
 {
@@ -30,18 +39,18 @@ void main ()
     
     // diffuse lighting 
     vec3 norm = normalize(normal);
-    vec3 lightDir = normalize(lightPos - positionWS);
+    vec3 lightDir = normalize(mainLight.lightPos - positionWS);
     float diff = max(dot(norm, lightDir), 0.0f);
-    vec4 lighting = vec4(diff * lightColor, 1);
+    vec4 lighting = vec4(diff * mainLight.lightColor * mainLight.lightStrength, 1);
 
     // ambient lighting
-    lighting.rgb += ambientColor * ambientStrength;
+    lighting.rgb += scene.ambientColor * scene.ambientStrength;
 
     // specular lighting
-    vec3 viewDir = normalize(viewPos - positionWS);
+    vec3 viewDir = normalize(scene.viewPos - positionWS);
     vec3 reflectDir = reflect(-lightDir, norm);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0f), 32.0f);
-    vec3 specular = specStrength * spec * lightColor;
+    vec3 specular = material.specStrength * spec * mainLight.lightColor;
     lighting.rgb += specular;
 
     FragColor = tex1 * lighting;
