@@ -140,6 +140,9 @@ namespace GayCubes
 
 		float coral[3] = {1.0f, 1.0f, 1.0f};
 		shader.setGlobalVec3Value(coral, "albedo");
+		shader.setGlobalFloatValue(_material.specStrength, "specStrength");
+
+		shader.setGlobalVec3Value(glm::value_ptr(camera._position), "viewPos");
 
 		shader.setGlobalMatrix4Value(camera.projection(), "projection");
 		shader.setGlobalMatrix4Value(camera.viewMatrix(), "view");

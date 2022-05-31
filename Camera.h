@@ -13,6 +13,8 @@ namespace GayCubes
 	class Camera
 	{
 	public:
+		glm::vec3 _position;
+
 		Camera(float windowWidth, float windowHeight, glm::vec3 position, glm::vec3 worldUp);
 		
 		void Update(InputInfo input, Time time);
@@ -26,8 +28,6 @@ namespace GayCubes
 		float pitch;
 
 		glm::mat4 _projection;
-
-		glm::vec3 _position;
 		glm::vec3 _worldUp;
 
 		glm::vec3 _front = glm::vec3(0.0f, 0.0f, -1.0f);

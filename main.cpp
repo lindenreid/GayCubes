@@ -70,7 +70,7 @@ int main()
 	Texture tex1 = Texture::Texture(0, "../resources/models/deer/textures/albedo.jpg", false, false);
 	Texture tex2 = Texture::Texture(1, "../resources/textures/awesomeFace.png", true, true);
 
-	Material material = Material::Material(shader, tex1, tex2);
+	Material material = Material::Material(shader, tex1, tex2, 1.0f);
 
 	Renderer renderer = Renderer::Renderer("../resources/models/deer/deer.obj", material);
 
@@ -98,7 +98,7 @@ int main()
 	// light debug renderer
 	// -----------------------------
 	ShaderProgram lightShader = ShaderProgram::ShaderProgram("shaders/lightVertex.glsl", "shaders/lightFrag.glsl");
-	Material lightMat = Material::Material(lightShader, tex1, tex2); // TODO: material constructor that doesn't require textures
+	Material lightMat = Material::Material(lightShader, tex1, tex2, 0.0f); // TODO: material constructor that doesn't require textures
 	Renderer lightRenderer = Renderer::Renderer("../resources/models/oval.obj", lightMat);
 
 	// render loop
