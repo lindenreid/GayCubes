@@ -169,8 +169,8 @@
   <ItemGroup>
     <None Include="shaders\lightFrag.glsl" />
     <None Include="shaders\lightVertex.glsl" />
-    <None Include="shaders\rainbowVertex.glsl" />
-    <None Include="shaders\rainbowFrag.glsl" />
+    <None Include="shaders\litVertex.glsl" />
+    <None Include="shaders\litFrag.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\awesomeface.png" />

@@ -64,7 +64,7 @@ int main()
 
 	// model renderer
 	// -----------------------------
-	ShaderProgram shader = ShaderProgram::ShaderProgram("shaders/rainbowVertex.glsl", "shaders/rainbowFrag.glsl");
+	ShaderProgram shader = ShaderProgram::ShaderProgram("shaders/litVertex.glsl", "shaders/litFrag.glsl");
 	
 	Texture tex1 = Texture::Texture(0, "../resources/models/deer/textures/albedo.jpg", false, false);
 	Texture tex2 = Texture::Texture(1, "../resources/textures/awesomeFace.png", true, true);
