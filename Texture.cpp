@@ -7,16 +7,19 @@
 
 namespace GayCubes
 {
-	Texture::Texture(int targetIndex, const char* textureFilePath, bool alpha)
+	Texture::Texture(int targetIndex, const char* textureFilePath, bool alpha, bool flip)
 	{
 		_textureFilePath = textureFilePath;
 		_texture = 0;
 		_targetIndex = targetIndex;
 		_alpha = alpha;
+		_openGLflip = flip;
 	}
 
 	void Texture::loadTexture()
 	{
+		stbi_set_flip_vertically_on_load(_openGLflip);
+
 		// bind texture
 		glGenTextures(1, &_texture);
 		

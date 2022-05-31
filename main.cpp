@@ -56,8 +56,6 @@ int main()
 		return -1;
 	}
 
-	stbi_set_flip_vertically_on_load(true);
-
 	glViewport(0, 0, windowWidth, windowHeight);
 
 	// enable depth buffer
@@ -67,14 +65,14 @@ int main()
 	ShaderProgram shader = ShaderProgram::ShaderProgram("shaders/rainbowVertex.glsl", "shaders/rainbowFrag.glsl");
 	
 	// textures
-	Texture tex1 = Texture::Texture(0, "../resources/models/backpack/diffuse.jpg", false);
-	Texture tex2 = Texture::Texture(1, "../resources/textures/awesomeFace.png", true);
+	Texture tex1 = Texture::Texture(0, "../resources/models/deer/textures/albedo.jpg", false, false);
+	Texture tex2 = Texture::Texture(1, "../resources/textures/awesomeFace.png", true, true);
 
 	// materials
 	Material material = Material::Material(shader, tex1, tex2);
 
 	// renderer
-	Renderer renderer = Renderer::Renderer("../resources/models/backpack/backpack.obj", material);
+	Renderer renderer = Renderer::Renderer("../resources/models/deer/deer.obj", material);
 
 	// camera
 	Camera camera = Camera::Camera(
