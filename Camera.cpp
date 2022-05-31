@@ -9,13 +9,15 @@
 
 namespace GayCubes
 {
-	Camera::Camera(glm::vec3 position, glm::vec3 worldUp)
+	Camera::Camera(float windowWidth, float windowHeight, glm::vec3 position, glm::vec3 worldUp)
 	{
 		this->_position = position;
 		this->_worldUp = worldUp;
 
 		yaw = -90.0f;
 		pitch = 0.0f;
+
+		_projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
 	}
 
 	void Camera::Update(InputInfo input, Time time)

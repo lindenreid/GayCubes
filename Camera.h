@@ -13,16 +13,19 @@ namespace GayCubes
 	class Camera
 	{
 	public:
-		Camera(glm::vec3 position, glm::vec3 worldUp);
+		Camera(float windowWidth, float windowHeight, glm::vec3 position, glm::vec3 worldUp);
 		
 		void Update(InputInfo input, Time time);
 
 		glm::mat4 viewMatrix() { return glm::lookAt(_position, _position+_front, _worldUp); }
+		glm::mat4 projection() { return _projection; }
 
 	private:
 		const float _sensitivity = 0.05f;
 		float yaw;
 		float pitch;
+
+		glm::mat4 _projection;
 
 		glm::vec3 _position;
 		glm::vec3 _worldUp;

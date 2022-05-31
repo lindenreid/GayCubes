@@ -2,6 +2,10 @@
 
 #include <iostream>
 #include <cmath>
+
+#include <assimp-3.1.1/include/assimp/Importer.hpp>
+#include <assimp-3.1.1/include/assimp/scene.h>
+#include <assimp-3.1.1/include/assimp/postprocess.h>
 #include <GLAD/glad/glad.h>
 #include <glfw-3.3.7/include/GLFW/glfw3.h>
 #include <glm/glm/glm.hpp>
@@ -15,9 +19,13 @@
 #include "Texture.h"
 #include "Camera.h"
 #include "Time.h"
+#include "Material.h"
+#include "Mesh.h"
+#include "Renderer.h"
 
 using namespace GayCubes;
 
+// resume lighting tutorial from here: https://learnopengl.com/Lighting/Basic-Lighting
 int main()
 {
 	glfwInit();
@@ -57,107 +65,30 @@ int main()
 	ShaderProgram shader = ShaderProgram::ShaderProgram("shaders/rainbowVertex.glsl", "shaders/rainbowFrag.glsl");
 	ShaderProgram lightShader = ShaderProgram::ShaderProgram("shaders/lightVertex.glsl", "shaders/lightFrag.glsl");
 
+	// textures
+	Texture tex1 = Texture::Texture(0, "textures/container.jpg", false);
+	Texture tex2 = Texture::Texture(1, "textures/awesomeFace.png", true);
+
+	// materials
+	Material material = Material::Material(shader, tex1, tex2);
+
+	// renderer
+	Renderer renderer = Renderer::Renderer("models/backpack.fbx", material);
+
 	// camera
 	Camera camera = Camera::Camera(
-		glm::vec3(0.0f, 0.0f, 3.0f),	// position
+		(float)windowWidth,
+		(float)windowHeight,
+		glm::vec3(0.0f, 0.0f, -3.0f),	// position
 		glm::vec3(0.0f, 1.0f, 0.0f)		// world up
 	);
-
-	// create perspective projection matrix
-	glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
 
 	// time
 	Time time = Time::Time();
 	time.Initialize();
 
-	// cube verts
-	float cubeVerts[] = {
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f	
-	};
-
-	// setup cube VAO
-	// -----------------------------
-	unsigned int VBO, cubeVAO;
-	glGenVertexArrays(1, &cubeVAO);
-	glGenBuffers(1, &VBO);
-	
-	glBindBuffer(GL_ARRAY_BUFFER, VBO); 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVerts), cubeVerts, GL_STATIC_DRAW);
-
-	glBindVertexArray(cubeVAO);
-
-	// position
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	// tex coords
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	// setup light VAO
-	// -----------------------------
-	unsigned int lightVAO;
-	glGenVertexArrays(1, &lightVAO);
-	glBindVertexArray(lightVAO);
-	
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-	// position
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	// tex coords
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	// shared data
-	// -----------------------------
-	// load textures
-	Texture tex1 = Texture::Texture(0, "textures/container.jpg", false);
-	tex1.loadTexture();
-
-	Texture tex2 = Texture::Texture(1, "textures/awesomeFace.png", true);
-	tex2.loadTexture();
-	
 	// setup light info
+	// TODO: make a Light class
 	float l[3];
 	float* lightColor = Color::blue.toArray(l);
 	glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
@@ -178,43 +109,9 @@ int main()
 		glClearColor(gray.r, gray.g, gray.b, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// draw cube
+		// draw all renderers
 		// -----------------------------
-		shader.useProgram();
-		shader.setGlobalVec3Value(lightColor, "lightColor");
-		float c[3];
-		float* coral = Color::coral.toArray(c);
-		std::cout << "coral: " << coral[0] << coral[1] << coral[2] << std::endl;
-		shader.setGlobalVec3Value(coral, "albedo");
-		shader.setGlobalMatrix4Value(proj, "projection");
-		shader.setGlobalMatrix4Value(camera.viewMatrix(), "view");
-		glm::mat4 model = glm::mat4(1.0f);
-		shader.setGlobalMatrix4Value(model, "model");
-		
-		// define textures
-		shader.setGlobalIntValue(0, "texture1");
-		shader.setGlobalIntValue(1, "texture2");
-		tex1.bindTexture();
-		tex2.bindTexture();
-
-		// draw verts
-		glBindVertexArray(cubeVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-
-		// draw light
-		// -----------------------------
-		lightShader.useProgram();
-		lightShader.setGlobalVec3Value(lightColor, "lightColor");
-		lightShader.setGlobalMatrix4Value(proj, "projection");
-		lightShader.setGlobalMatrix4Value(camera.viewMatrix(), "view");
-		glm::mat4 lightModel = glm::mat4(1.0f);
-		lightModel = glm::translate(lightModel, lightPos);
-		lightModel = glm::scale(lightModel, glm::vec3(0.2f));
-		lightShader.setGlobalMatrix4Value(lightModel, "model");
-
-		// draw verts
-		glBindVertexArray(lightVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		renderer.draw(camera, lightColor);
 
 		// draw window
 		glfwSwapBuffers(window);
@@ -222,10 +119,7 @@ int main()
 	}
 
 	// de-allocate all resources
-	glDeleteVertexArrays(1, &cubeVAO);
-	glDeleteVertexArrays(1, &lightVAO);
-	glDeleteBuffers(1, &VBO);
-	shader.deallocateProgram();
+	renderer.deallocate();
 
 	// clean up GLFW resources
 	glfwTerminate();
