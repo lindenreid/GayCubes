@@ -123,13 +123,14 @@ int main()
 		float t = time.GetTime();
 		float radius = 5.0f;
 		float speed = 1.0f;
-		lighting._mainDirectionalLight._position.x = 1.0f + std::sin(t * speed) * radius;
-		lighting._mainDirectionalLight._position.z = std::cos(t * speed) * radius;
+		lighting._mainDirectionalLight._direction.x = std::sin(t * speed) * radius;
+		lighting._mainDirectionalLight._direction.z = std::cos(t * speed) * radius;
+		lighting._mainDirectionalLight._direction = glm::normalize(lighting._mainDirectionalLight._direction);
 
 		// draw all renderers
 		// -----------------------------
 		renderer.draw(camera, lighting._mainDirectionalLight, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-		//lightRenderer.draw(camera, lighting._mainDirectionalLight, lighting._mainDirectionalLight._position, glm::vec3(0.2f, 0.2f, 0.2f));
+		lightRenderer.draw(camera, lighting._mainDirectionalLight, lighting._mainDirectionalLight._position, glm::vec3(0.2f, 0.2f, 0.2f));
 
 		// draw window
 		glfwSwapBuffers(window);

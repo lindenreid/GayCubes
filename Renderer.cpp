@@ -132,7 +132,7 @@ namespace GayCubes
 		float l[3];
 		float* lightColor = lighting._mainDirectionalLight._color.toArray(l);
 		shader.setGlobalVec3Value(lightColor, "mainLight.lightColor");
-		shader.setGlobalVec3Value(glm::value_ptr(lighting._mainDirectionalLight._position), "mainLight.lightPos");
+		shader.setGlobalVec3Value(glm::value_ptr(lighting._mainDirectionalLight._direction), "mainLight.lightDir");
 		shader.setGlobalFloatValue(lighting._mainDirectionalLight._strength, "mainLight.lightStrength");
 
 		// scene properties

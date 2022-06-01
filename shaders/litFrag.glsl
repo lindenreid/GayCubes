@@ -21,7 +21,7 @@ uniform Material material;
 struct Light {
     vec3 lightColor;
     float lightStrength;
-    vec3 lightPos;
+    vec3 lightDir;
 };
 uniform Light mainLight;
 
@@ -40,8 +40,7 @@ void main ()
     
     // diffuse lighting 
     vec3 norm = normalize(normal);
-    vec3 lightDir = normalize(mainLight.lightPos - positionWS);
-    float diff = max(dot(norm, lightDir), 0.0f);
+    float diff = max(dot(norm, mainLight.lightDir), 0.0f);
     vec4 lighting = vec4(albedoTex, 1) * vec4(diff * mainLight.lightColor * mainLight.lightStrength, 1);
 
     // ambient lighting
@@ -49,7 +48,7 @@ void main ()
 
     // specular lighting
     vec3 viewDir = normalize(scene.viewPos - positionWS);
-    vec3 reflectDir = reflect(-lightDir, norm);
+    vec3 reflectDir = reflect(-mainLight.lightDir, norm);
     float spec = specTex * pow(max(dot(viewDir, reflectDir), 0.0f), 32.0f);
     vec3 specular = material.specStrength * spec * mainLight.lightColor;
     lighting.rgb += specular;
