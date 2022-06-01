@@ -158,8 +158,8 @@ namespace GayCubes
 		shader.setGlobalMatrix4Value(modelIT, "model_inv_trans");
 
 		// textures
-		shader.setGlobalIntValue(0, "texture1");
-		shader.setGlobalIntValue(1, "texture2");
+		shader.setGlobalIntValue(0, "material.diffuseTex");
+		shader.setGlobalIntValue(1, "material.specularTex");
 		_material.bindResources();
 
 		// draw verts

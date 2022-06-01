@@ -9,9 +9,9 @@ in vec3 normal;
 in vec3 positionWS;
 
 // material settings
-uniform sampler2D texture1;
-uniform sampler2D texture2;
 struct Material {
+    sampler2D diffuseTex;
+    sampler2D specularTex;
     vec3 albedo;
     float specStrength;
 };
@@ -35,23 +35,27 @@ uniform SceneSettings scene;
 
 void main ()
 {
-    vec4 tex1 = texture(texture1, texCoord);
+    vec3 albedoTex = texture(material.diffuseTex, texCoord).rgb;
+    float specTex = texture(material.specularTex, texCoord).r;
     
     // diffuse lighting 
     vec3 norm = normalize(normal);
     vec3 lightDir = normalize(mainLight.lightPos - positionWS);
     float diff = max(dot(norm, lightDir), 0.0f);
-    vec4 lighting = vec4(diff * mainLight.lightColor * mainLight.lightStrength, 1);
+    vec4 lighting = vec4(albedoTex, 1) * vec4(diff * mainLight.lightColor * mainLight.lightStrength, 1);
 
     // ambient lighting
-    lighting.rgb += scene.ambientColor * scene.ambientStrength;
+    lighting.rgb += albedoTex.rgb * scene.ambientColor * scene.ambientStrength;
 
     // specular lighting
     vec3 viewDir = normalize(scene.viewPos - positionWS);
     vec3 reflectDir = reflect(-lightDir, norm);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0f), 32.0f);
+    float spec = specTex * pow(max(dot(viewDir, reflectDir), 0.0f), 32.0f);
     vec3 specular = material.specStrength * spec * mainLight.lightColor;
     lighting.rgb += specular;
 
-    FragColor = tex1 * lighting;
+    //FragColor = vec4(texCoord, 0, 1);
+    //FragColor = vec4(albedoTex, 1);
+    //FragColor = vec4(specTex, specTex, specTex, 1.0f);
+    FragColor = lighting;
 }

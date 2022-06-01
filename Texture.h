@@ -8,7 +8,7 @@ namespace GayCubes
 	class Texture
 	{
 	public:
-		Texture(int targetIndex, const char* textureFilePath, bool alpha, bool flip);
+		Texture(int targetIndex, const char* textureFilePath, bool flip);
 		void loadTexture();
 		void bindTexture();
 
@@ -16,7 +16,7 @@ namespace GayCubes
 		const char* _textureFilePath;
 		unsigned int _texture;
 		unsigned int _targetIndex;
-		bool _alpha;
+
 		bool _openGLflip;
 	};
 }

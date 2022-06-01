@@ -7,11 +7,11 @@ namespace GayCubes
 	{
 	public:
 		ShaderProgram Shader;
-		Texture tex1;
-		Texture tex2;
+		Texture tex_albedo;
+		Texture tex_spec;
 		float specStrength;
 		
-		Material(ShaderProgram shader, Texture tex1, Texture tex2, float specStrength);
+		Material(ShaderProgram shader, Texture albedoTex, Texture specTex, float specStrength);
 		void bindResources();
 		void deallocate();
 

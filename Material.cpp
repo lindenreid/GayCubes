@@ -6,26 +6,18 @@
 
 namespace GayCubes
 {
-	Material::Material(ShaderProgram shader, Texture tex1, Texture tex2, float specStrength)
+	Material::Material(ShaderProgram shader, Texture albedoTex, Texture specTex, float specStrength)
 		: Shader(shader),
-			tex1(tex1),
-			tex2(tex2)
+			tex_albedo(albedoTex),
+			tex_spec(specTex)
 	{
 		this->specStrength = specStrength;
-		loadTextures();
-	}
-
-	void Material::loadTextures()
-	{
-		tex1.loadTexture();
-		tex2.loadTexture();
 	}
 
 	void Material::bindResources()
 	{
-		tex1.bindTexture();
-		tex2.bindTexture();
-		//glActiveTexture(GL_TEXTURE0);
+		tex_albedo.bindTexture();
+		tex_spec.bindTexture();
 	}
 
 	void Material::deallocate()

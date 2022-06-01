@@ -66,10 +66,10 @@ int main()
 	// -----------------------------
 	ShaderProgram shader = ShaderProgram::ShaderProgram("shaders/litVertex.glsl", "shaders/litFrag.glsl");
 	
-	Texture tex1 = Texture::Texture(0, "../resources/models/deer/textures/albedo.jpg", false, false);
-	Texture tex2 = Texture::Texture(1, "../resources/textures/awesomeFace.png", true, true);
+	Texture albedoTex = Texture::Texture(0, "../resources/models/deer/textures/albedo.png", false);
+	Texture roughnessTex = Texture::Texture(1, "../resources/models/deer/textures/roughness.jpg", false);
 
-	Material material = Material::Material(shader, tex1, tex2, 1.0f);
+	Material material = Material::Material(shader, albedoTex, roughnessTex, 1.0f);
 
 	Renderer renderer = Renderer::Renderer("../resources/models/deer/deer.obj", material);
 
@@ -97,8 +97,10 @@ int main()
 	// light debug renderer
 	// -----------------------------
 	ShaderProgram lightShader = ShaderProgram::ShaderProgram("shaders/lightVertex.glsl", "shaders/lightFrag.glsl");
-	Material lightMat = Material::Material(lightShader, tex1, tex2, 0.0f); // TODO: material constructor that doesn't require textures
+	Material lightMat = Material::Material(lightShader, albedoTex, roughnessTex, 0.0f); // TODO: material constructor that doesn't require textures
 	Renderer lightRenderer = Renderer::Renderer("../resources/models/oval.obj", lightMat);
+
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	// render loop
 	// TODO: double buffering
@@ -127,7 +129,7 @@ int main()
 		// draw all renderers
 		// -----------------------------
 		renderer.draw(camera, lighting._mainDirectionalLight, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
-		lightRenderer.draw(camera, lighting._mainDirectionalLight, lighting._mainDirectionalLight._position, glm::vec3(0.2f, 0.2f, 0.2f));
+		//lightRenderer.draw(camera, lighting._mainDirectionalLight, lighting._mainDirectionalLight._position, glm::vec3(0.2f, 0.2f, 0.2f));
 
 		// draw window
 		glfwSwapBuffers(window);
@@ -136,6 +138,7 @@ int main()
 
 	// de-allocate all resources
 	renderer.deallocate();
+	lightRenderer.deallocate();
 
 	// clean up GLFW resources
 	glfwTerminate();
