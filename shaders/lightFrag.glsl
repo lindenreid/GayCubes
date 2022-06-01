@@ -2,14 +2,15 @@
 
 out vec4 FragColor;
 
-struct Light {
+#define NUM_DIR_LIGHTS 2
+struct Light_Directional {
     vec3 lightColor;
     float lightStrength;
-    vec3 lightPos;
+    vec3 lightDir;
 };
-uniform Light mainLight;
+uniform Light_Directional[NUM_DIR_LIGHTS] directionalLights;
 
 void main ()
 {
-    FragColor = vec4(mainLight.lightColor, 1);
+    FragColor = vec4(directionalLights[0].lightColor, 1);
 }

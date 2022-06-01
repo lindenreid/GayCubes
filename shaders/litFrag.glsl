@@ -18,43 +18,63 @@ struct Material {
 uniform Material material;
 
 // global vars
-struct Light {
+struct Light_Directional {
     vec3 lightColor;
     float lightStrength;
     vec3 lightDir;
 };
-uniform Light mainLight;
 
+#define NUM_DIR_LIGHTS 2
 struct SceneSettings {
     vec3 viewPos;
     vec3 ambientColor;
     float ambientStrength;
 };
 uniform SceneSettings scene;
+uniform Light_Directional[NUM_DIR_LIGHTS] directionalLights;
+
+vec3 DirectionalLightContribution (
+    vec3 albedoTex,
+    vec3 normal,
+    float specTex,
+    Light_Directional light
+) {
+    // diffuse lighting
+    float diff = max(dot(normal, light.lightDir), 0.0f);
+    vec3 lighting = albedoTex * diff * light.lightColor * light.lightStrength;
+
+    // specular lighting
+    vec3 viewDir = normalize(scene.viewPos - positionWS);
+    vec3 reflectDir = reflect(-light.lightDir, normal);
+    float spec = specTex * pow(max(dot(viewDir, reflectDir), 0.0f), 32.0f);
+    vec3 specular = material.specStrength * spec * light.lightColor;
+    lighting.rgb += specular;
+
+    return lighting;
+}
 
 
 void main ()
 {
+    // texture inputs
     vec3 albedoTex = texture(material.diffuseTex, texCoord).rgb;
     float specTex = texture(material.specularTex, texCoord).r;
     
-    // diffuse lighting 
+    // normal inputs
     vec3 norm = normalize(normal);
-    float diff = max(dot(norm, mainLight.lightDir), 0.0f);
-    vec4 lighting = vec4(albedoTex, 1) * vec4(diff * mainLight.lightColor * mainLight.lightStrength, 1);
+    
+    vec3 color = vec3(0,0,0);
+    // directional lights 
+    for(int i = 0; i < NUM_DIR_LIGHTS; i++)
+    {
+        color += DirectionalLightContribution(albedoTex, norm, specTex, directionalLights[i]);
+    }
 
-    // ambient lighting
-    lighting.rgb += albedoTex.rgb * scene.ambientColor * scene.ambientStrength;
-
-    // specular lighting
-    vec3 viewDir = normalize(scene.viewPos - positionWS);
-    vec3 reflectDir = reflect(-mainLight.lightDir, norm);
-    float spec = specTex * pow(max(dot(viewDir, reflectDir), 0.0f), 32.0f);
-    vec3 specular = material.specStrength * spec * mainLight.lightColor;
-    lighting.rgb += specular;
+    // scene ambient lighting
+    color.rgb += albedoTex.rgb * scene.ambientColor * scene.ambientStrength;
 
     //FragColor = vec4(texCoord, 0, 1);
     //FragColor = vec4(albedoTex, 1);
     //FragColor = vec4(specTex, specTex, specTex, 1.0f);
-    FragColor = lighting;
+    FragColor = vec4(color, 1);
 }
