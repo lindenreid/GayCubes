@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 #include <assimp-3.1.1/include/assimp/Importer.hpp>
 #include <assimp-3.1.1/include/assimp/scene.h>
@@ -27,6 +28,9 @@
 
 using namespace GayCubes;
 
+// General TODOs
+// textures: don't load same texture multiple times
+// next tut: https://learnopengl.com/Advanced-OpenGL/Stencil-testing
 int main()
 {
 	glfwInit();
@@ -62,15 +66,15 @@ int main()
 	// enable depth buffer
 	glEnable(GL_DEPTH_TEST);
 
-	// deer model renderer
+	// load textures
 	// -----------------------------
-	ShaderProgram shader = ShaderProgram::ShaderProgram("shaders/litVertex.glsl", "shaders/litFrag.glsl");
-	
 	Texture albedoTex = Texture::Texture(0, "../resources/models/deer/textures/albedo.png", false);
 	Texture roughnessTex = Texture::Texture(1, "../resources/models/deer/textures/roughness.jpg", false);
 
+	// deer model renderer
+	// -----------------------------
+	ShaderProgram shader = ShaderProgram::ShaderProgram("shaders/litVertex.glsl", "shaders/litFrag.glsl");
 	Material material = Material::Material(shader, albedoTex, roughnessTex, 1.0f);
-
 	Renderer renderer = Renderer::Renderer("../resources/models/deer/deer.obj", material);
 
 	// camera
